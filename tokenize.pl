@@ -38,6 +38,12 @@ sub tokenize {
 	if ($expr=~/[\!\@\#\$\%\&\_]/) {
 		die "wrong";
 	}
+	if ($expr=~/^[\/\*\^]/) {
+		die "wrong";
+	}
+	if ($expr=~/[\-\+\/\*\^]\)/) {
+		die "wrong";
+	}
 
 	$expr=~s/[ ]+//g;
 	$expr=~s/(\D|^)(\.\d*)/$1.$k.$2/ge;
@@ -64,7 +70,17 @@ sub tokenize {
 		else {
 		}
 	}
-	#p (@res);
+	#for(my $i = 0;$i <=$#res;$i++) {
+	#if ($res[$i]=~/(\*)|(\/)|(\^)|(\-)|(\+)|(U\+)|(U\-)/){
+	#	$j++;
+	#}
+	#else {
+	#	$j+=0;
+	#}
+	#}
+	#if ($j==0){
+	#	die "wrong";
+	#}
 	return \@res;
 }
 1;
