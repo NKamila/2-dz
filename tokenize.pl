@@ -16,6 +16,7 @@ sub tokenize {
 	chomp(my $expr = shift);
 	my @res;
 	my $k=0;
+	my $j=0;
 	if ($expr=~/[+-][\/\*]/) {
 		die "binary operator can not go after unary";
 	}
@@ -24,13 +25,13 @@ sub tokenize {
 		die "two binary sign standing next each other";
 	}
 	if ($expr=~/[a-df-zA-DF-Z]/) {
-		die "NAN"; 
+		die "wrong"; 
 	}
 	if ($expr=~/(\d+)\.(\d+)\.(\d+)/) {
-		die "NAN";
+		die "wrong";
 	}
 	if ($expr=~/(ee+)/) {
-		die "NAN";
+		die "wrong";
 	}
 	if ($expr=~/[\(\+\-\*\/\^\(e]$/) {
 		die "wrong";
@@ -38,10 +39,15 @@ sub tokenize {
 	if ($expr=~/[\!\@\#\$\%\&\_]/) {
 		die "wrong";
 	}
-	if ($expr=~/^[\/\*\^]/) {
+	if ($expr=~/^[\/\*\^]/)
+	{
 		die "wrong";
 	}
-	if ($expr=~/[\-\+\/\*\^]\)/) {
+	if ($expr=~/[\-\+\/\*\^]\)/)
+	{
+		die "wrong";
+	}
+	if ($expr=~/\d+[ ]\d+/) {
 		die "wrong";
 	}
 
@@ -53,7 +59,7 @@ sub tokenize {
 	$expr=~s/(\d+)\.$k/$1/g;
 	$expr=~s/(\d*\.*\d*)e(.?\d+)/$1*10**$2;/ge;	
 	# #$expr=~s/(\D)([+-])/$1U$2/g;
-	# $expr=~ s/(\^)([\+\-])/$1U$2/g;
+	$expr=~ s/^([\+\-])/U$1/g;
 	$expr=~s/([\*\/])([\+\-][\(])/$1U$2/g;
 	$expr=~s/([\+\-])([\+\-][\d])/$1U$2/g;
 	@res=split /(?:(\*)|(\/)|(\^)|(\()|(\))|(\-)|(\+)|(U\+)|(U\-))/,$expr;
@@ -70,17 +76,20 @@ sub tokenize {
 		else {
 		}
 	}
-	#for(my $i = 0;$i <=$#res;$i++) {
-	#if ($res[$i]=~/(\*)|(\/)|(\^)|(\-)|(\+)|(U\+)|(U\-)/){
-	#	$j++;
-	#}
-	#else {
-	#	$j+=0;
-	#}
-	#}
-	#if ($j==0){
-	#	die "wrong";
-	#}
+	# for(my $i = 0;$i <=$#res;$i++) {
+	# if ($res[$i]=~/(\*)|(\/)|(\^)|(\-)|(\+)|(U\+)|(U\-)/){
+	# 	$j++;
+
+	# }
+	# else {
+	# 	$j+=0;
+	# }
+
+	# }
+	# if ($j==0){
+	# 	die "wrong";
+	# }
+	#p (@res);
 	return \@res;
 }
 1;
